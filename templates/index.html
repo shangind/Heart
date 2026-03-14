@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ML Prediction Service</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .upload-box { border: 3px dashed #007bff; padding: 50px; text-align: center; border-radius: 10px; }
+        .upload-box:hover { background: #f8f9ff; }
+        input[type=file] { margin: 20px 0; }
+        button { background: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .result { margin-top: 30px; padding: 20px; background: #d4edda; border-radius: 5px; }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🎯 ML Prediction Service</h1>
+    <p>Загрузите CSV файл тестовой выборки для предсказаний</p>
+    
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <div class="upload-box">
+            <p><strong>📁 Выберите CSV файл</strong></p>
+            <input type="file" name="file" accept=".csv" required>
+            <br>
+            <button type="submit">🚀 Получить предсказания</button>
+        </div>
+    </form>
+    
+    {% if result %}
+    <div class="result">
+        <h2>✅ Результат предсказаний</h2>
+        <p><strong>Файл:</strong> {{ result.filename }}</p>
+        <p><strong>Строк обработано:</strong> {{ result.rows_count }}</p>
+        <p><strong>Успешных предсказаний:</strong> {{ "%.1f"|format(result.success_rate * 100) }}%</p>
+        <h3>Первые 10 предсказаний:</h3>
+        <pre>{{ result.sample_predictions }}</pre>
+        <a href="/download/{{ result.filename }}" style="color: #007bff; font-weight: bold;">
+            📥 Скачать полный CSV с предсказаниями
+        </a>
+    </div>
+    {% endif %}
+</body>
+</html>
